@@ -53,7 +53,7 @@ export interface GoogleTokenClient {
 
 // Exact Google Cloud OAuth 2.0 Web Client ID provided by user
 export const EXACT_GOOGLE_CLIENT_ID =
-  '1058219630435-0s2s8r59r2c3t1h5a4j1r5i8o2d5e7v1.apps.googleusercontent.com';
+  '1058219630435-fu0ghr242e9vkb7u9s25706mnrnhpd8c.apps.googleusercontent.com';
 
 // Validates whether an env var is a legitimate Google Web Client ID (ends with .apps.googleusercontent.com and not a client secret)
 const rawEnvClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
