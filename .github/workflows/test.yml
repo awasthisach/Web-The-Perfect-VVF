@@ -1,0 +1,54 @@
+name: Automated Vercel App Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Install Playwright
+        run: bun add -d @playwright/test
+
+      - name: Install Playwright Browsers
+        run: bunx playwright install --with-deps chromium
+
+      - name: Create Test File Automatically
+        run: |
+          mkdir -p tests
+          cat << 'EOF' > tests/app.spec.js
+          import { test, expect } from '@playwright/test';
+
+          test('App loads and shows Google Login', async ({ page }) => {
+            // आपका Vercel ऐप खोल रहा है
+            await page.goto('https://web-the-perfect-vvf.vercel.app');
+            
+            // चेक कर रहा है कि Google Login बटन आ गया है या नहीं (15 सेकंड तक इंतज़ार)
+            const loginBtn = page.getByText('Sign in with Google');
+            await expect(loginBtn).toBeVisible({ timeout: 15000 });
+          });
+          EOF
+
+      - name: Run E2E Tests
+        run: bunx playwright test tests/app.spec.js
+        
